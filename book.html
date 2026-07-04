@@ -7678,6 +7678,362 @@ Codex 负责帮你完成具体编程任务。
 <pre><code class="language-powershell">Remove-Item &quot;C:\path\to\file.txt&quot;
 </code></pre>
 <p>如果需要批量删除文件，应停止操作，并向用户请求，让用户手动删除。</p>
+<h4>Codex记忆的最佳使用方法</h4>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-01.jpg" alt="Codex记忆的最佳使用方法封面图" width="860">
+</p>
+
+<p>很多人用 Codex 最大的问题，不是不会提问。</p>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-02.jpg" alt="很多人用Codex不是不会提问" width="860">
+</p>
+
+<p>而是每次都从零开始交代：</p>
+<blockquote>
+<p>“我的项目怎么跑测试”
+“我喜欢什么输出风格”
+“这个仓库有哪些坑”
+“这个流程上次做到哪一步”
+“这些资料在哪里”</p>
+</blockquote>
+<p>这其实是在把“记忆系统”当聊天记录用。</p>
+<p>更好的方式，是把不同类型的信息放到不同的上下文层里，让 Codex 在合适的时候读取合适的信息。</p>
+<p>先看一张总表：</p>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-03.jpg" alt="Codex记忆系统应该放在哪里的总结图" width="860">
+</p>
+
+<table>
+<thead>
+<tr>
+<th>你想让 Codex 记住什么</th>
+<th>推荐放哪里</th>
+<th>不建议放哪里</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前任务的临时要求</td>
+<td>当前 prompt / 当前会话</td>
+<td>AGENTS.md</td>
+<td>只用一次，不要污染长期规则</td>
+</tr>
+<tr>
+<td>个人偏好、常见习惯</td>
+<td>Memories / 全局 AGENTS.md</td>
+<td>每次重新说</td>
+<td>稳定但不一定要进项目仓库</td>
+</tr>
+<tr>
+<td>仓库规则、测试命令、目录约定</td>
+<td>repo 的 AGENTS.md</td>
+<td>Memories</td>
+<td>这是硬规则，应该随项目走</td>
+</tr>
+<tr>
+<td>可复用工作流</td>
+<td>Skill</td>
+<td>AGENTS.md</td>
+<td>Skill 能放参考文件、脚本、模板</td>
+</tr>
+<tr>
+<td>定期复盘、跟进、监控</td>
+<td>Automations</td>
+<td>记在脑子里</td>
+<td>需要按时间唤醒，不是静态规则</td>
+</tr>
+<tr>
+<td>Slack / GitHub / Docs 里的实时资料</td>
+<td>MCP / Connector</td>
+<td>手动复制粘贴</td>
+<td>外部信息会变，应该现取现用</td>
+</tr>
+</tbody>
+</table>
+<h5>当前会话 / prompt：最适合放“这次任务”的要求</h5>
+<p>当前会话就是最短期的记忆，只用于这次任务，几乎不会重复使用。</p>
+<p>比如：</p>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-04.jpg" alt="当前会话适合放本次任务要求的示例图" width="860">
+</p>
+
+<blockquote>
+<p>“这次网页背景改成蓝白色调”
+“在网页右上角加一个登录按钮”
+“这个方案只考虑 Windows”
+“先别提交 PR”</p>
+</blockquote>
+<p>这类信息只对当前任务有用，不应该沉淀成长期规则。</p>
+<p>如果把临时要求写进 AGENTS.md，后面每次打开项目，Codex 都可能误以为这是长期规则，反而会污染上下文。</p>
+<h5>Memories：适合放“稳定偏好”和“常见背景”</h5>
+<p>Memories 适合保存那些跨会话、跨项目也经常有用的信息。</p>
+<p>简单来说，Memories 是：</p>
+<blockquote>
+<p>Codex 对你的个人工作习惯的软记忆。</p>
+</blockquote>
+<p>比如：</p>
+<ul>
+<li>你偏好中文回答。</li>
+<li>你希望解释尽量通俗，不要堆术语。</li>
+<li>你做项目时喜欢先看方案，再动手改代码。</li>
+<li>你常用 Windows、PowerShell、某些固定目录或工具链。</li>
+<li>你经常要求修改后说明 diff、验证命令和未验证项。</li>
+</ul>
+<p>操作步骤：</p>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-05.jpg" alt="Codex设置里开启Memories的界面" width="860">
+</p>
+
+<ol>
+<li>在 Codex 设置里开启 Memories。</li>
+<li>用几次真实任务让 Codex 形成稳定偏好。</li>
+<li>可以在下面这个目录里查看对应的记忆文件：</li>
+</ol>
+<pre><code class="language-text">~/.codex/memories/
+</code></pre>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-06.jpg" alt="Codex memories目录文件示例" width="860">
+</p>
+
+<p>常见文件和目录大致可以这样理解：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+<th>简单来说</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MEMORY.md</td>
+<td>Codex 最主要的长期记忆文件，通常放稳定偏好、常用工作流、技术栈、项目习惯等</td>
+<td>正式记忆本</td>
+</tr>
+<tr>
+<td>memory_summary.md</td>
+<td>对记忆内容做压缩总结，让 Codex 更快读取核心信息</td>
+<td>记忆摘要</td>
+</tr>
+<tr>
+<td>raw_memories.md</td>
+<td>更原始的记忆条目，可能包含从历史 thread 提炼出来的未压缩记录</td>
+<td>原始记录本</td>
+</tr>
+<tr>
+<td>rollout_summaries/</td>
+<td>存放某些任务、会话或运行过程的摘要，用来支撑后续记忆生成</td>
+<td>过去任务摘要库</td>
+</tr>
+<tr>
+<td>extensions/</td>
+<td>给扩展功能使用的记忆目录</td>
+<td>扩展记忆区</td>
+</tr>
+</tbody>
+</table>
+<p>建议定期检查 Memories：</p>
+<ul>
+<li>有没有把一次性的临时要求记进去。</li>
+<li>有没有把隐私信息、密钥、账号信息记进去。</li>
+<li>有没有把已经过期或错误的偏好记进去。</li>
+<li>有没有重要规则只存在 Memories 里，但没有同步到 AGENTS.md 或 Skill。</li>
+</ul>
+<p>一句话总结：</p>
+<blockquote>
+<p>Memories 是 Codex 用来记录你长期偏好和常见背景的记忆。</p>
+</blockquote>
+<h5>AGENTS.md：最适合放“必须遵守的项目规则”</h5>
+<p>AGENTS.md 是我最推荐新手先用的一层。</p>
+<p>它的作用很像写给 Codex 的工作说明书。Codex 开始工作前会读取 AGENTS.md，并把里面的规则当成当前项目或当前用户的工作约束。</p>
+<p>值得注意的是，AGENTS.md 可以分为全局级和项目级。</p>
+<p>全局级 AGENTS.md 会影响你在 Codex 中的大多数项目和会话，适合放个人长期规则。</p>
+<p>文件位置通常是：</p>
+<pre><code class="language-text">~/.codex/AGENTS.md
+</code></pre>
+<p>操作步骤：</p>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-07.jpg" alt="Codex个性化设置写入全局AGENTS规则" width="860">
+</p>
+
+<ol>
+<li>直接在 Codex 设置里的个性化区域写入规则。</li>
+<li>只写几条最重要、最稳定的规则。</li>
+<li>不要把某一次任务的临时要求写进去。</li>
+</ol>
+<p>比如：</p>
+<blockquote>
+<p>“每次文字输出都使用 Markdown 格式。”
+“不确定需求时，先指出不确定点，再给推荐方案。”
+“不要擅自删除文件、重命名核心目录或大范围重构。”</p>
+</blockquote>
+<p>项目级 AGENTS.md 只影响当前项目，适合放仓库规则、测试命令、目录约定和交付标准。</p>
+<p>文件位置通常是：</p>
+<pre><code class="language-text">~/xxx项目/AGENTS.md
+</code></pre>
+<p>操作步骤：</p>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-08.jpg" alt="在项目根目录创建AGENTS文件" width="860">
+</p>
+
+<ol>
+<li>在对应项目文件夹根目录里创建 AGENTS.md。</li>
+<li>只写这个项目必须遵循的规则。</li>
+<li>如果不确定怎么写，可以让 Codex 先阅读项目，再帮你生成初版。</li>
+</ol>
+<p>比如：</p>
+<blockquote>
+<p>“使用项目现有技术栈，不要擅自更换框架。”
+“不要擅自删除、重命名核心目录。”
+“修 bug 时，优先找到根因，不要只做表面兼容。”</p>
+</blockquote>
+<p>最简单的模板：</p>
+<pre><code class="language-text"># AGENTS.md
+
+## Project overview
+
+这是一个前端项目，主要用于构建网页、交互页面、小游戏或内容展示页。
+
+## Tech stack
+
+- 使用项目现有技术栈，不要擅自更换框架。
+- 如果是 Vite / React / Vue / Next.js 项目，先确认 `package.json` 再判断运行方式。
+- 不要随意引入新的生产依赖。
+- 如确实需要新增依赖，先说明原因、用途和替代方案，等待确认。
+
+## Project structure
+
+- `src/`：主要源码目录。
+- `public/`：静态资源目录。
+- `components/`：组件目录，如果项目中存在则优先复用。
+- `assets/`：图片、图标、样式资源。
+- 不要擅自删除、重命名核心目录。
+- 修改前先阅读相关文件，不要只凭文件名猜测。
+
+## Working rules
+
+- 开始修改前，先简单说明计划。
+- 优先小步修改，不要一次性大范围重构。
+- 保持原项目代码风格、命名风格和目录结构。
+- 修 bug 时，优先找到根因，不要只做表面兼容。
+- 改 UI 时，注意中文排版、信息层级、间距、按钮状态和移动端适配。
+- 不要覆盖用户已有改动。
+
+## Commands
+
+请根据 `package.json` 判断实际命令。常见命令如下：
+
+npm install
+npm run dev
+npm run build
+npm run lint
+</code></pre>
+<h5>Skills：适合放“可复用工作流”</h5>
+<p>如果 AGENTS.md 是项目说明书，Skill 更像一个可复用工作流包。</p>
+<p>Skill 可以包含 SKILL.md、参考文件、脚本和资源；它适合那些反复出现、需要步骤、示例或工具辅助的任务。</p>
+<p>比如：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>应该做成 Skill 吗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每次都要写同一种 X Article</td>
+<td>应该</td>
+</tr>
+<tr>
+<td>每次都要按固定流程做 PR review</td>
+<td>应该</td>
+</tr>
+<tr>
+<td>只想提醒 Codex 用 pnpm</td>
+<td>不用，放 AGENTS.md</td>
+</tr>
+<tr>
+<td>只对当前任务有效的语气要求</td>
+<td>不用，放 prompt</td>
+</tr>
+</tbody>
+</table>
+<p>用来写作的 Skill，不是只记一句“帮我写推特”。</p>
+<p>它真正应该沉淀的是：</p>
+<ul>
+<li>写作风格。</li>
+<li>输出结构。</li>
+<li>Markdown 格式。</li>
+<li>图片占位。</li>
+<li>教程步骤。</li>
+<li>推荐规则。</li>
+<li>质量检查。</li>
+</ul>
+<p>操作步骤：</p>
+<ol>
+<li>先把反复做的任务列出来。</li>
+<li>如果一个任务出现 3 次以上，就考虑做成 Skill。</li>
+<li>SKILL.md 只放核心规则。</li>
+<li>长模板、风格卡、检查表放 references/。</li>
+<li>能自动化的部分再放脚本。</li>
+</ol>
+<h5>最后的总结</h5>
+<p>如果前面看起来有点绕，可以这样理解：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>比喻</th>
+<th>适合放什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前会话 / prompt</td>
+<td>临时便签</td>
+<td>这次任务的一次性要求</td>
+</tr>
+<tr>
+<td>Memories</td>
+<td>个人习惯档案</td>
+<td>稳定偏好、常见背景、长期习惯</td>
+</tr>
+<tr>
+<td>全局 AGENTS.md</td>
+<td>个人工作规则</td>
+<td>所有项目里都要尽量遵守的硬规则</td>
+</tr>
+<tr>
+<td>项目级 AGENTS.md</td>
+<td>项目工作说明书</td>
+<td>当前仓库的技术栈、命令、目录和禁区</td>
+</tr>
+<tr>
+<td>Skill</td>
+<td>可复用流程包</td>
+<td>经常重复、需要步骤和模板的任务</td>
+</tr>
+<tr>
+<td>Automations</td>
+<td>定时提醒和监控</td>
+<td>定期复盘、跟进、巡检、监控</td>
+</tr>
+<tr>
+<td>MCP / Connector</td>
+<td>实时资料入口</td>
+<td>Slack、GitHub、Docs 等会变化的外部信息</td>
+</tr>
+</tbody>
+</table>
+<p align="center">
+  <img src=".cache/pdf-assets/assets/images/codex-memory-best-practices-09.jpg" alt="Codex记忆系统各层级总结图" width="860">
+</p>
+
+<p>最后补充一句：</p>
+<blockquote>
+<p>Codex 的记忆和上下文，可以按“越临时、越具体、越靠近当前任务，优先级越高”来理解。</p>
+</blockquote>
 <h2>第四篇：标准工作流</h2>
 <h3>从需求到交付的完整链路</h3>
 <p>很多人刚开始用 Codex，会直接一句话丢给它：</p>

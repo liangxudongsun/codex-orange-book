@@ -13,8 +13,12 @@ import build_pdf
 
 
 class BuildPdfAssetTests(unittest.TestCase):
-    def test_build_outputs_preview_pdf_without_overwriting_original_download(self) -> None:
-        self.assertEqual(build_pdf.OUTPUT_PDF.name, "Codex橙皮书.preview.pdf")
+    def test_build_uses_extracted_book_markdown_as_source(self) -> None:
+        self.assertEqual(build_pdf.BOOK_MARKDOWN.name, "Codex橙皮书.md")
+
+    def test_build_outputs_download_and_preview_pdfs(self) -> None:
+        self.assertEqual(build_pdf.OUTPUT_PDF.name, "Codex橙皮书.pdf")
+        self.assertEqual(build_pdf.OUTPUT_PREVIEW_PDF.name, "Codex橙皮书.preview.pdf")
 
     def test_pdf_source_excludes_reading_entry_section(self) -> None:
         source = """# Codex 橙皮书
@@ -34,7 +38,7 @@ class BuildPdfAssetTests(unittest.TestCase):
 - 第一篇
 """
 
-        prepared = build_pdf.prepare_readme_for_pdf(source)
+        prepared = build_pdf.prepare_book_markdown_for_pdf(source)
 
         self.assertIn("# Codex 橙皮书", prepared)
         self.assertIn("## 目录", prepared)
