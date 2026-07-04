@@ -14,7 +14,7 @@ class ReaderLinkTests(unittest.TestCase):
             "https://raw.githubusercontent.com/Vink567/codex-orange-book/main/Codex%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf",
             readme,
         )
-        self.assertIn("https://github.com/Vink567/codex-orange-book/blob/main/README.md", readme)
+        self.assertIn("./Codex橙皮书.md", readme)
 
     def test_reader_page_downloads_original_pdf_and_embeds_preview_pdf(self) -> None:
         index_html = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -24,10 +24,9 @@ class ReaderLinkTests(unittest.TestCase):
         self.assertIn('download="Codex橙皮书.pdf"', index_html)
         self.assertNotIn('download="Codex橙皮书.preview.pdf"', index_html)
 
-    def test_reader_page_markdown_link_points_to_this_fork(self) -> None:
+    def test_reader_page_does_not_point_to_upstream_markdown(self) -> None:
         index_html = (ROOT / "index.html").read_text(encoding="utf-8")
 
-        self.assertIn("https://github.com/Vink567/codex-orange-book/blob/main/README.md", index_html)
         self.assertNotIn("github.com/bozhouDev/codex-orange-book/blob/main/README.md", index_html)
 
 

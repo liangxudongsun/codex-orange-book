@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""把 README.md + cover.html 合并渲染成单个 PDF（Chrome headless 导出）。
+"""把 Codex橙皮书.md + cover.html 合并渲染成 PDF（Chrome headless 导出）。
 
 流程：
 1. 读取 cover.html，取出其 <style> 与封面 <div class="cover">，做多页上下文适配后嵌入；
-2. 用 python-markdown 把 README 正文转成 HTML（支持表格、围栏代码、原始 HTML 图片块）；
+2. 用 python-markdown 把橙皮书正文转成 HTML（支持表格、围栏代码、原始 HTML 图片块）；
 3. 套上整本书的打印 CSS（A4、页边距、表格/代码/图片样式），封面用命名页占满一整页；
 4. 输出 book.html 到仓库根目录（让 assets/ 相对路径能被解析），再调用 Chrome --print-to-pdf；
-5. 默认生成轻量预览版 Codex橙皮书.preview.pdf，不覆盖高清下载版 Codex橙皮书.pdf。
+5. 同时生成高清下载版 Codex橙皮书.pdf 和轻量预览版 Codex橙皮书.preview.pdf。
 """
 
 from __future__ import annotations
@@ -21,10 +21,11 @@ import markdown
 from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
-README = ROOT / "README.md"
+BOOK_MARKDOWN = ROOT / "Codex橙皮书.md"
 COVER = ROOT / "cover.html"
 BOOK_HTML = ROOT / "book.html"
-OUTPUT_PDF = ROOT / "Codex橙皮书.preview.pdf"
+OUTPUT_PDF = ROOT / "Codex橙皮书.pdf"
+OUTPUT_PREVIEW_PDF = ROOT / "Codex橙皮书.preview.pdf"
 PDF_ASSET_CACHE = ROOT / ".cache" / "pdf-assets"
 PDF_IMAGE_MAX_WIDTH = 1400
 PDF_IMAGE_JPEG_QUALITY = 82
@@ -79,8 +80,8 @@ def extract_cover() -> tuple[str, str]:
     return style, body
 
 
-def prepare_readme_for_pdf(text: str) -> str:
-    """Remove README-only navigation blocks before rendering the book PDF."""
+def prepare_book_markdown_for_pdf(text: str) -> str:
+    """Remove web-only navigation blocks before rendering the book PDF."""
     excluded_h2_titles = {"阅读入口"}
     output: list[str] = []
     skipping = False
@@ -99,9 +100,9 @@ def prepare_readme_for_pdf(text: str) -> str:
     return "".join(output)
 
 
-def render_readme() -> str:
-    """README.md → HTML 正文。"""
-    text = prepare_readme_for_pdf(README.read_text(encoding="utf-8"))
+def render_book_markdown() -> str:
+    """Codex橙皮书.md → HTML 正文。"""
+    text = prepare_book_markdown_for_pdf(BOOK_MARKDOWN.read_text(encoding="utf-8"))
     md = markdown.Markdown(
         extensions=["tables", "fenced_code", "sane_lists", "attr_list"],
         output_format="html5",
@@ -259,11 +260,10 @@ BOOK_CSS = """
 """
 
 
-def build() -> None:
+def build_document(content_html: str) -> str:
     cover_style, cover_body = extract_cover()
-    content_html = prepare_pdf_assets(render_readme())
 
-    document = f"""<!DOCTYPE html>
+    return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -283,6 +283,14 @@ def build() -> None:
 </body>
 </html>
 """
+
+
+def export_pdf(output_pdf: Path, *, optimize_assets: bool) -> None:
+    content_html = render_book_markdown()
+    if optimize_assets:
+        content_html = prepare_pdf_assets(content_html)
+
+    document = build_document(content_html)
     BOOK_HTML.write_text(document, encoding="utf-8")
     print(f"已生成 {BOOK_HTML.relative_to(ROOT)}（{len(document)} 字节）")
 
@@ -292,14 +300,19 @@ def build() -> None:
             "--headless",
             "--disable-gpu",
             "--no-pdf-header-footer",
-            f"--print-to-pdf={OUTPUT_PDF}",
+            f"--print-to-pdf={output_pdf}",
             BOOK_HTML.as_uri(),
         ],
         check=True,
         capture_output=True,
     )
-    size_kb = OUTPUT_PDF.stat().st_size / 1024
-    print(f"已导出 {OUTPUT_PDF.name}（{size_kb:.0f} KB）")
+    size_kb = output_pdf.stat().st_size / 1024
+    print(f"已导出 {output_pdf.name}（{size_kb:.0f} KB）")
+
+
+def build() -> None:
+    export_pdf(OUTPUT_PDF, optimize_assets=False)
+    export_pdf(OUTPUT_PREVIEW_PDF, optimize_assets=True)
 
 
 if __name__ == "__main__":
