@@ -1,6 +1,6 @@
 # ChatGPT 橙皮书
 
-> 一本写给开发者、独立开发者和 AI 工具重度用户的 Codex 非官方开源指南。
+> 一本写给开发者、独立开发者和 AI 工具重度用户的 ChatGPT 智能体与 Codex 非官方开源指南。
 
 作者 X/Twitter：
 
@@ -36,12 +36,15 @@
 ├── ChatGPT橙皮书.md            # 完整 Markdown 正文
 ├── ChatGPT橙皮书.pdf           # 完整 PDF
 ├── ChatGPT橙皮书.preview.pdf   # 便于 GitHub 预览的 PDF
-├── index.html                  # 在线阅读入口
-├── book.html                   # 在线阅读正文页面
+├── index.html                  # PDF 在线阅读器
+├── book.html                   # PDF 排版与导出的中间页面
 ├── cover.html                  # 封面页面
 ├── assets/images/              # 正文配图
-└── tools/                      # PDF 构建与检查脚本
+├── site/                       # 可直接部署的完整静态网站
+└── tools/                      # PDF、静态网站构建与检查脚本
 ```
+
+其中 `site/index.html` 是同步完整正文后的静态网站入口；根目录的 `index.html` 主要用于在线打开 PDF。
 
 ## 说明
 
