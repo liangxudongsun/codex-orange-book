@@ -14,11 +14,11 @@ import build_pdf
 
 class BuildPdfAssetTests(unittest.TestCase):
     def test_build_uses_extracted_book_markdown_as_source(self) -> None:
-        self.assertEqual(build_pdf.BOOK_MARKDOWN.name, "Codex橙皮书.md")
+        self.assertEqual(build_pdf.BOOK_MARKDOWN.name, "ChatGPT橙皮书.md")
 
     def test_build_outputs_download_and_preview_pdfs(self) -> None:
-        self.assertEqual(build_pdf.OUTPUT_PDF.name, "Codex橙皮书.pdf")
-        self.assertEqual(build_pdf.OUTPUT_PREVIEW_PDF.name, "Codex橙皮书.preview.pdf")
+        self.assertEqual(build_pdf.OUTPUT_PDF.name, "ChatGPT橙皮书.pdf")
+        self.assertEqual(build_pdf.OUTPUT_PREVIEW_PDF.name, "ChatGPT橙皮书.preview.pdf")
 
     def test_pdf_source_excludes_reading_entry_section(self) -> None:
         source = """# Codex 橙皮书
@@ -28,7 +28,7 @@ class BuildPdfAssetTests(unittest.TestCase):
 ## 阅读入口
 
 - [在线阅读](https://vink567.github.io/codex-orange-book/)
-- [下载 PDF](https://raw.githubusercontent.com/Vink567/codex-orange-book/main/Codex%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf)
+- [下载 PDF](https://raw.githubusercontent.com/Vink567/codex-orange-book/main/ChatGPT%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf)
 - [Markdown 原文](https://github.com/Vink567/codex-orange-book/blob/main/README.md)
 
 > GitHub 文件页可能无法稳定预览较大的 PDF。
