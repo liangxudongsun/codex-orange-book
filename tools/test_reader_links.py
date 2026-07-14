@@ -46,9 +46,9 @@ class ReaderLinkTests(unittest.TestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("actions/upload-pages-artifact@v4", workflow)
+        self.assertIn("actions/upload-pages-artifact@v5", workflow)
         self.assertIn("path: site", workflow)
-        self.assertIn("actions/deploy-pages@v4", workflow)
+        self.assertIn("actions/deploy-pages@v5", workflow)
 
 
 if __name__ == "__main__":
