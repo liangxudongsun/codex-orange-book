@@ -15,9 +15,9 @@
 
 ## 阅读入口
 
-- [在线阅读](https://vink567.github.io/codex-orange-book/)
+- [在线阅读](https://bozhoudev.github.io/codex-orange-book/)
 - [完整 Markdown 原稿](./ChatGPT橙皮书.md)
-- [下载 PDF](https://raw.githubusercontent.com/Vink567/codex-orange-book/main/ChatGPT%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf)
+- [下载 PDF](https://raw.githubusercontent.com/bozhouDev/codex-orange-book/main/ChatGPT%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf)
 - [预览 PDF](./ChatGPT橙皮书.preview.pdf)
 
 ## 内容包括

@@ -6,12 +6,12 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class ReaderLinkTests(unittest.TestCase):
-    def test_readme_points_to_this_fork_pages_and_original_pdf_download(self) -> None:
+    def test_readme_points_to_owner_pages_and_pdf_download(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
-        self.assertIn("https://vink567.github.io/codex-orange-book/", readme)
+        self.assertIn("https://bozhoudev.github.io/codex-orange-book/", readme)
         self.assertIn(
-            "https://raw.githubusercontent.com/Vink567/codex-orange-book/main/ChatGPT%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf",
+            "https://raw.githubusercontent.com/bozhouDev/codex-orange-book/main/ChatGPT%E6%A9%99%E7%9A%AE%E4%B9%A6.pdf",
             readme,
         )
         self.assertIn("./ChatGPT橙皮书.md", readme)
@@ -33,11 +33,22 @@ class ReaderLinkTests(unittest.TestCase):
         site_html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
 
         self.assertIn("ChatGPT 橙皮书", site_html)
+        self.assertIn("https://bozhoudev.github.io/codex-orange-book/", site_html)
+        self.assertNotIn("https://vink567.github.io/codex-orange-book/", site_html)
         self.assertIn("v0.2.0", site_html)
         self.assertIn("Work 到底是什么", site_html)
         self.assertIn("Sites 到底是什么", site_html)
         self.assertIn("Chrome 插件", site_html)
         self.assertNotIn(">Codex 橙皮书<", site_html)
+
+    def test_pages_workflow_deploys_generated_site_directory(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("actions/upload-pages-artifact@v4", workflow)
+        self.assertIn("path: site", workflow)
+        self.assertIn("actions/deploy-pages@v4", workflow)
 
 
 if __name__ == "__main__":
